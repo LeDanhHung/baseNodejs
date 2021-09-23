@@ -4,9 +4,9 @@ import chai from "chai";
 import chaihttp from "chai-http";;
 
 
-const should = chai.should
-chai.use(chaihttp);
 
+chai.use(chaihttp);
+const should = chai.should()
 describe('/Login and Register test chai', () => {
     it('Get Home page', (done) => {
         chai.request('http://localhost:4444/')
@@ -31,7 +31,7 @@ describe('/Login and Register test chai', () => {
             .end((err, res) => {
                 res.should.have.status(200);
                 res.body.should.be.a('object');
-                res.body.should.have.property('errors');
+
                 res.body.should.have.property('name');
                 res.body.should.have.property('email');
                 res.body.should.have.property('password');
@@ -39,6 +39,22 @@ describe('/Login and Register test chai', () => {
                 done();
             })
 
+    });
+    it('đăng kí thất bại', (done) => {
+        let user = {
+            username: 'hungledanh26092001',
+            password: 'hungledanh2609',
+            name: 'ledanhhungww',
+            email: 'hungmetxi@gmail.com'
+
+        }
+        chai.request('http://localhost:4444/')
+            .post('auth/dangki')
+            .send(user)
+            .end((err, res) => {
+                res.should.have.status(406);
+
+            })
     });
     it('đăng nhập thành công', (done) => {
         let user = {

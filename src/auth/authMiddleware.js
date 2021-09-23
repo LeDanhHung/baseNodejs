@@ -1,36 +1,36 @@
 import jwt from 'jsonwebtoken'
 import sessionService from '../sessions/sessionsController.js'
 const session = new sessionService
+import ERROS from "../errors/erros.js";
+const err = new ERROS();
 export async function Auth(req, res, next) {
-    try {
-        const token = req.headers.token
-        if (!token || token == "") { res.json("plesase login") }
-        const tokenDecode = jwt.decode(token, process.env.JWT_SECRET, (err, result) => {
-            if (err) {
-                throw err
+
+    // check token chuyền vào headers 
+    const token = req.headers.token
+    if (!token || token == "") { next(err.invalidToken()) } // k có token truyền vào header
+    const tokenDecode = jwt.decode(token, process.env.JWT_SECRET, (errors, result) => {
+        if (errors) {
+            next(err.failedSave())
+        }
+        return result
+    })
+    const read = await session.find(tokenDecode.id)
+    if (!read) { res.json("please login") }
+    if (token == read.jwt) {
+        const docDecode = jwt.decode(read.jwt, process.env.JWT_SECRET, (errors, result) => {
+            if (errors) {
+                return (err.invalidToken())
             }
             return result
         })
-        if (tokenDecode == undefined) { res.json("invalid token") }
-        const read = await session.find(tokenDecode.id)
-        if (!read) { res.json("please login") }
-        if (token == read.jwt) {
-            const docDecode = jwt.decode(read.jwt, process.env.JWT_SECRET, (err, result) => {
-                if (err) {
-                    throw err
-                }
-                return result
-            })
-            if (docDecode.status == "Verified") {
-                req.userId = read.userId;
-                next();
-            } else {
-                res.json("Please verify your email first")
-            }
+        if (docDecode.status == "Xác nhận") {
+            req.userId = read.userId;
+            next();
         } else {
-            res.json("invalid token")
+            res.json("Please verify your email first")
         }
-    } catch (err) {
-        throw err
+    } else {
+        next(err.invalidToken())
     }
+
 }

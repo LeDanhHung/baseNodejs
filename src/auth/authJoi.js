@@ -6,7 +6,7 @@ export const register = Joi.object({
         .max(20)
         .required(),
     email: Joi.string()
-        .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net', 'vn'] } })
+        .email({ minDomainSegments: 2, tlds: { allow: ['com', 'vn'] } })
         .required(),
     password: Joi.string()
         .pattern(new RegExp('^[a-zA-Z0-9]{3,30}$'))

@@ -1,6 +1,6 @@
 import UserData from "./userData.js"
-import APIError from "../errors/ApiErr.js"
-import httpStatus from "http-status"
+import ERROS from "../errors/erros.js";
+const err = new ERROS();
 const data = new UserData
 class UserController {
     async findUserId(id) {
@@ -14,8 +14,7 @@ class UserController {
         if (read.modifiedCount == 1) {
             return "Update thành công"
         }
-        const error = new APIError('update thất bại', httpStatus.UNAUTHORIZED, false)
-        return error
+        return err.duplicateValue()
     }
     async changePass(id, obj) {
         obj.updatedAt = new Date()
@@ -23,8 +22,7 @@ class UserController {
         if (read.modifiedCount == 1) {
             return "đổi mật khẩu thành công"
         }
-        const error = new APIError('Đổi mật khẩu thất bại', httpStatus.UNAUTHORIZED, false)
-        return error
+        return err.duplicateValue()
 
     }
     async forgotPass(email, pass) {
@@ -36,8 +34,7 @@ class UserController {
         if (read.email) {
             return read
         } else {
-            const error = new APIError('Email không tồn tại', http.status.UNAUTHORIZED, false)
-            return error
+            return err.wrongEmail()
         }
 
     }

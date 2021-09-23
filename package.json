@@ -6,7 +6,7 @@
     "type": "module",
     "scripts": {
         "start": "nodemon app.js",
-        "test": "mocha --timeout 10000",
+        "test": "mocha ./src/test/test.js",
         "lint": "eslint ."
     },
     "keywords": [],
