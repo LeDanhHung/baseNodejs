@@ -23,7 +23,7 @@ export const login = Joi.object({
         .min(6)
         .max(20),
     email: Joi.string()
-        .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net', 'vn'] } })
+        .email({ minDomainSegments: 2, tlds: { allow: ['com', 'vn'] } })
         .min(5)
         .max(100),
     password: Joi.string()

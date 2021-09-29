@@ -10,6 +10,8 @@ import { changePass, forgot } from './src//user/userJoi.js'
 import auth from './src/auth/authApi.js';
 import { mailForgotPassword } from './src/auth/authMailler.js'
 
+import photo from './src/photo/photoApi.js';
+import album from './src/album/albumApi.js';
 import { randomCode } from './src/maths/randomCode.js'
 import verifyServices from './src/verify/verifyController.js';
 import { expiredMins } from './src/maths/time.js'
@@ -25,7 +27,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
 const userService = new userServices
 const verifyService = new verifyServices
-const session = new sessionService
+
 
 app.get("/home", async(req, res) => {
     res.json("Trang chủ ")
@@ -88,8 +90,9 @@ app.get('/re/changepass/:email', async(req, res, next) => {
     //Route
 app.use('/auth', auth)
 app.use('/user', user)
-
-//Server
+app.use('/photo', photo)
+app.use('/album', album)
+    //Server
 app.listen(process.env.port, async() => {
     console.log(`Server chạy bằng con port ${process.env.port}`);
 })

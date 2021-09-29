@@ -2,12 +2,8 @@ import usersSchema from "../user/userModel.js"
 import { STATUS } from "../user/userModel.js"
 class AuthData {
     async register(data) {
-        try {
-            const read = await usersSchema.create(data)
-            return read
-        } catch (err) {
-            throw err
-        }
+        const read = await usersSchema.create(data)
+        return read
     }
     async findOne(any) {
         const read = await usersSchema.findOne(any)
